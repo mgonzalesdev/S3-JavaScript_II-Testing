@@ -1,4 +1,5 @@
 const movies = require('../src/data');
+//import movies from "./data.js";
 const {
   getAllDirectors,
   getMoviesFromDirector,
