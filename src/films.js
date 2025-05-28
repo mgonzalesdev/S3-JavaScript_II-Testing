@@ -3,30 +3,46 @@ const movies = require("./data");
 //console.log(movies);
 // Exercise 1: Get the array of all directors.
 function getAllDirectors(array) {
-  let result = array.map(movie =>  movie.director);
-  console.log("EXERCICE 1 ->", result);
+  let result = array.map(movie => movie.director);
   return result;
 }
-getAllDirectors(movies);
 
 // Exercise 2: Get the films of a certain director
 function getMoviesFromDirector(array, director) {
-
+  let result = array.filter(movie => movie.director === director);
+  return result;
 }
 
 // Exercise 3: Calculate the average of the films of a given director.
 function moviesAverageOfDirector(array, director) {
-
+  let moviesFromDirector = array.filter(movie => movie.director === director);
+  let sum = moviesFromDirector.reduce((accumulator, movie) => accumulator + movie.score, 0);
+  return parseFloat((sum / moviesFromDirector.length).toFixed(2));
 }
 
 // Exercise 4:  Alphabetic order by title 
 function orderAlphabetically(array) {
+  let result = array.sort((a, b) => {
+    const titleA = a.title.toUpperCase();
+    const titleB = b.title.toUpperCase();
+    return titleA < titleB ? -1 : titleA > titleB ? 1 : 0
+  }).map(movie => movie.title).slice(0, 20);
 
+  return result;
 }
 
 // Exercise 5: Order by year, ascending
 function orderByYear() {
-
+  // return result = array.sort((a, b) => a.year - b.year)
+  let result = movies.sort((a, b) => {
+    if (a.year !== b.year) {
+      return a.año - b.año; // Ordenar por año (ascendente)
+    } else {
+      //return a.title.localeCompare(b.title); // Ordenar por título (alfabético)
+      return a.title.toUpperCase() < b.title.toUpperCase() ? -1 : a.title.toUpperCase() > b.title.toUpperCase() ? 1 : 0
+    }
+  });
+  return result;
 }
 
 // Exercise 6: Calculate the average of the movies in a category
