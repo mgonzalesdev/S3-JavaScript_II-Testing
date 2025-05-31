@@ -266,9 +266,9 @@ describe('Function "orderByYear"', () => {
     expect(orderByYear(arr)).not.toBe(arr);
   });
 
-  // it('should return the element in a single element array', () => {
-  //   expect(orderByYear([{ year: 1982 }])).toEqual([{ year: 1982 }]);
-  // });
+  it('should return the element in a single element array', () => {
+    expect(orderByYear([{ year: 1982 }])).toEqual([{ year: 1982 }]);
+  });
 
   it('should return the new array in ascending order', () => {
     expect(
@@ -305,6 +305,9 @@ describe('Function "moviesAverageByCategory"', () => {
   });
   it('should be different from NaN', () => {
     expect(moviesAverageByCategory).not.toBeNaN();
+  });
+   it('should return 0 if no movies of the genre exist', () => {
+    expect(moviesAverageByCategory(movies, 'Infantil')).toBe(0);
   });
   it(' should return the average score of movies selecting only the gener films. With 2 decimals! ', () => {
     expect(moviesAverageByCategory([

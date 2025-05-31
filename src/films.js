@@ -22,45 +22,122 @@ function moviesAverageOfDirector(array, director) {
 
 // Exercise 4:  Alphabetic order by title 
 function orderAlphabetically(array) {
-  let result = array.sort((a, b) => {
+  let result = [...array];
+  return result.sort((a, b) => {
     const titleA = a.title.toUpperCase();
     const titleB = b.title.toUpperCase();
     return titleA < titleB ? -1 : titleA > titleB ? 1 : 0
   }).map(movie => movie.title).slice(0, 20);
 
-  return result;
+
 }
 
 // Exercise 5: Order by year, ascending
-function orderByYear() {
+function orderByYear(array) {
   // return result = array.sort((a, b) => a.year - b.year)
-  let result = movies.sort((a, b) => {
+  let copyArray = array.map(element => ({ ...element })); // Crear una copia del array original para no modificarlo directamente
+  copyArray.sort((a, b) => {
     if (a.year !== b.year) {
       return a.year - b.year; // Ordenar por año (ascendente)
     } else {
       //return a.title.localeCompare(b.title); // Ordenar por título (alfabético)
-      return a.title.toUpperCase() < b.title.toUpperCase() ? -1 : a.title.toUpperCase() > b.title.toUpperCase() ? 1 : 0;
+      // return a.title.toUpperCase() < b.title.toUpperCase() ? -1 : a.title.toUpperCase() > b.title.toUpperCase() ? 1 : 0;
+      if (a.title < b.title) {
+        return -1;
+      } else if (a.title > b.title) {
+        return 1;
+      } else {
+        return 0;
+      }
     }
   });
-  return result;
+  return copyArray;
 }
 
 // Exercise 6: Calculate the average of the movies in a category
 function moviesAverageByCategory(array, genre) {
-  let moviesByCategory = array.map(movie => {
-    if (movie.genre.includes(genre))
-      return movie.score;
-  });
-  return parseFloat((moviesByCategory.reduce((accumulator, score) => accumulator + score, 0) / moviesByCategory.length).toFixed(2));
+  let calificaciones = array.filter(movie => movie.genre.includes(genre)).map(movie => movie.score);
+  if (calificaciones.length === 0) return 0; // Si no hay películas en la categoría, retornar 0
+  return parseFloat((calificaciones.reduce((accumulator, score) => accumulator + score, 0) / calificaciones.length).toFixed(2));
 }
 
 // Exercise 7: Modify the duration of movies to minutes
-function hoursToMinutes() {
+function hoursToMinutes(array) {
+  return array.map(movie => {
+    const durationStr = movie.duration;
+    let totalMinutes = 0;
 
+    // Expresiones regulares para extraer horas y minutos
+    const hourMatch = durationStr.match(/(\d+)h/);
+    const minMatch = durationStr.match(/(\d+)min/);
+
+    if (hourMatch) {
+      totalMinutes += parseInt(hourMatch[1], 10) * 60;
+    }
+
+    if (minMatch) {
+      totalMinutes += parseInt(minMatch[1], 10);
+    }
+
+    // Retornar una nueva copia del objeto, con duration en minutos
+    return {
+      ...movie,
+      duration: totalMinutes
+    };
+  });
+
+  // const movies2 = [...movies];
+  // return movies2.map(movie => {
+  //   let duration = movie.duration;
+  //   let totalMinutes = 0;
+
+  //   if (typeof duration !== 'string') return { ...movie, duration: 0 };
+
+  //   if (duration.includes('h')) {
+  //     let hours = parseInt(duration.split('h')[0]);
+  //     totalMinutes += hours * 60; // Convertir horas a minutos
+  //     duration = duration.split('h')[1].trim(); // Actualizar duración para procesar minutos
+  //   }
+
+  //   if (duration.includes('min')) {
+  //     let minutes = parseInt(duration.replace('min', '').trim());
+  //     totalMinutes += minutes; // Añadir minutos
+  //   }
+  //   return {
+  //     ...movie,
+  //     duration: totalMinutes
+  //   };
+  // })
+
+
+  // const partes = str.split(' ');
+  // let totalMinutos = 0;
+
+  // partes.forEach(parte => {
+  //   if (parte.endsWith('h')) {
+  //     totalMinutos += parseInt(parte) * 60; // Convertir horas a minutos
+  //   } else if (parte.endsWith('min')) {
+  //     totalMinutos += parseInt(parte); // Añadir minutos
+  //   }
+  // });
+
+  // return totalMinutos;
 }
 
 // Exercise 8: Get the best film of a year
-function bestFilmOfYear() {
+function bestFilmOfYear(array, year) {
+  let moviesOfYear = array.filter(movie => movie.year === year);
+
+  if (moviesOfYear.length === 0) return []; // Si no hay películas del año, retornar null
+  const maxScore = Math.max(...moviesOfYear.map(movie => movie.score));
+
+  let result = moviesOfYear.filter(movie => movie.score === maxScore);
+  return result;
+  // let bestMovie = moviesOfYear.reduce((best, current) => {
+  //   return current.score > best.score ? current : best;
+  // });
+  // console.log(bestMovie);
+  // return bestMovie;
 
 }
 
