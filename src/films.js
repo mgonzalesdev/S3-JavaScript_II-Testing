@@ -21,12 +21,13 @@ function moviesAverageOfDirector(array, director) {
 
 // Exercise 4:  Alphabetic order by title 
 function orderAlphabetically(array) {
-  let result = [...array];
-  return result.sort((a, b) => {
-    const titleA = a.title.toUpperCase();
-    const titleB = b.title.toUpperCase();
-    return titleA < titleB ? -1 : titleA > titleB ? 1 : 0
-  }).map(movie => movie.title).slice(0, 20);
+  let result = array
+    .map(movie => movie.title)
+    .sort((a, b) => {
+      return a.toUpperCase() < b.toUpperCase() ? -1 : a.toUpperCase() > b.toUpperCase() ? 1 : 0
+    })
+    .slice(0, 20);
+  return result;
 }
 
 // Exercise 5: Order by year, ascending
@@ -52,10 +53,13 @@ function orderByYear(array) {
 
 // Exercise 6: Calculate the average of the movies in a category
 function moviesAverageByCategory(array, genre) {
-  let calificaciones = array.filter(movie => movie.genre.includes(genre)).map(movie => movie.score);
-  if (calificaciones.length === 0)
+  let score = array
+    .filter(movie => movie.genre.includes(genre))
+    .map(movie => movie.score);
+
+  if (score.length === 0)
     return 0;
-  return parseFloat((calificaciones.reduce((accumulator, score) => accumulator + score, 0) / calificaciones.length).toFixed(2));
+  return parseFloat((score.reduce((accumulator, score) => accumulator + score, 0) / score.length).toFixed(2));
 }
 
 // Exercise 7: Modify the duration of movies to minutes
@@ -72,19 +76,22 @@ function hoursToMinutes(array) {
 
     if (durationString.includes('h')) {
       let hours = parseInt(durationString.split('h')[0]);
-      totalMinutes += hours * 60;
+      if (!isNaN(hours)) {
+        totalMinutes += hours * 60;
+      }
       durationString = durationString.split('h')[1].trim();
     }
 
     if (durationString.includes('min')) {
       let minutes = parseInt(durationString.replace('min', '').trim());
-      totalMinutes += minutes;
+      if (!isNaN(minutes)) {
+        totalMinutes += minutes;
+      }
     }
     copyMovie.duration = totalMinutes;
     return copyMovie;
   });
 }
-// console.log(hoursToMinutes(movies));
 
 // Exercise 8: Get the best film of a year
 function bestFilmOfYear(array, year) {
